@@ -1,13 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Ubuntu:wght@400;700&display=swap');
+ *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+ }
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+       
+    font-family: 'Poppins', sans-serif;
+    background: url(./components/background.jpg) no-repeat  ;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+       min-height: 100vh;
+     
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+ }
+
+ 
+  .wrapper{
+    background: transparent;
+    width: 420px;
+    height:650px;
+    border-radius: 10px;
+    color:white;
+    position: relative;
+    display:flex;
+    align-items: center;
+    transition: height .2s ease;
+    overflow: hidden;
+    border:2px solid rgba(225, 225, 255, 0.1);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+
+    
+    
+}
+.wrapper.active{
+    height: 650px;
+}
+.wrapper .form-box{
+    width:100%;
+    padding:40px;
+      
+
+}
+/* Login components */
+.wrapper .form-box.login{
+   
+    transition: transform .18s ease;
+   transform: translate(0);
+}
+.wrapper.active .form-box.login{
+    transition: none;
+  transform: translateX(-400px);
+}
+/*  */
+
+/* Register components */
+.wrapper .form-box.register{
+    position:absolute;
+    transition: none;
+    /* transform: translateX(400px); */
+}
+ .wrapper.active .form-box.register{
+   
+    transition: transform .18s ease;
+   transform: translate(0);
+}
+/*  */
+form h1{
+    font-size:36px;
+    text-align: center;
+}
+ form .input-box{
+  position:relative;
+  width:100%;
+  height:50px;
+  margin:30px 0;
+    
+}
+.input-box input{
+ width:100%;
+ height:100%;
+ background: transparent;
+ border:none;
+ outline:none;
+ border:2px solid rgba(225, 225, 255, 0.1);
+ border-radius: 40px;
+ color:#fff;
+ padding:20px 45px 20px 20px ;
+}
+.input-box input::placeholder{
+    color:#fff;
+}
+.input-box .icon{
+    position:absolute;
+    right:20px ;
+    top:50%;
+   transform: translate(0, -50%);
+    font-size: 16px;
+}
+ form .remember-forgot{
+ display:flex;
+    justify-content: space-between;
+    font-size: 14.5px;
+    margin: -15px 0 15px;
+    margin-right: 4px;
+ }
+ .remember-forgot a{
+    color:#fff;
+    text-decoration: none;
+ }
+ .remember-forgot a:hover{
+    text-decoration: underline;
+ }
+ form button{
+    width: 100%;
+    height:45px;
+    border:none;
+    outline:none;
+    background: #fff;
+    border-radius: 40px;
+    font-size: 16px;
+    font-weight: 700;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    color:#333;
+
+ }
+ form .register-link{
+    font-size: 14.5px;
+    text-align: center;
+    margin: 20px 0 15px;
+ }
+ .register-link p a{
+    color:#fff;
+    text-decoration: none;
+    font-weight: 600;
+ }
+ .register-link p a:hover{
+    text-decoration: underline;
+ }
+ input[type="checkbox"] {
+  transform: translateY(1.001px);
 }
