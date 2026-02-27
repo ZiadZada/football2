@@ -29,15 +29,20 @@ function Login() {
        const email = userData.email;
       const userSignIn = await signInWithEmailAndPassword(auth, email, password);
 
-      if (userData.role == "admin") {
+      if (userData.role === "admin") {
         navigate("/admin");
-      } else if (userData.role == "student") {
+      } else if (userData.role === "student") {
         navigate("/student");
       } else {
         setError("Unknown role");
       }
     }catch(error){
-        setError(error.message);
+        console.error(error.code);
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential' ) {
+          setError("Invalid id or password");
+      }else {
+        setError("Login failed , please try again");
+      }
     }
   };
 
