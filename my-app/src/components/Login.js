@@ -30,9 +30,9 @@ function Login() {
       const userSignIn = await signInWithEmailAndPassword(auth, email, password);
 
       if (userData.role === "admin") {
-        navigate("/admin");
+        navigate("/AdminDashboard");
       } else if (userData.role === "student") {
-        navigate("/student");
+        navigate("/StudentDashboard");
       } else {
         setError("Unknown role");
       }
