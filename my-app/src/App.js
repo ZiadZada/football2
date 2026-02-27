@@ -4,9 +4,11 @@ import { auth, db } from './firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import Register from './components/Register';
 import Login from './components/Login';
+ 
 
 
 function App() {
+  
   const [userRole, setUserRole] = useState(null);
   const [loading, setLoading] = useState(true);
    useEffect(() => {

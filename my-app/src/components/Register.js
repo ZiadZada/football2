@@ -2,83 +2,131 @@ import { auth, db } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
-import { Link,useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from "react-router-dom";
+import { FaUser, FaPhoneAlt, FaLock } from "react-icons/fa";
+import'../index.css';
 
 function Register() {
-   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [studentCode, setStudentCode] = useState("");
-  const [error,setError] =useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setError('');
-    if (!name.trim()) {
-    setError("Please enter your full name.");
-    return;
-  }
-  const universityDomain = ".edu.eg"; 
-  if (!email.includes(universityDomain)) {
-    setError("Access denied. You must use a university email");
-    return;
-  }
+    setError("");
+
     if (password !== confirmPassword) {
-    setError("Passwords do not match! Please check again.");
-    return;
+      setError("Passwords do not match!");
+      return;
     }
+
+    if (phone.length < 11) {
+      setError("Please enter a valid phone number.");
+      return;
+    }
+
+    const internalEmail = `${studentCode}@university.com`;
+
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, internalEmail, password);
       const user = userCredential.user;
 
       await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
         name: name,
         studentCode: studentCode,
-        email: email,
-        role: "student" 
+        phone: phone,
+        role: "student",
+        uid: user.uid,
+        createdAt: new Date()
       });
-      navigate('/Login')
-      alert("تم التسجيل بنجاح!");
-    } catch (error) {
-        if(error.code==='auth/invalid-email'){
-          setError("Please enter a valid email address.");
-        }else if(error.code==='auth/email-already-in-use'){
-          setError("This email isalready in use.");
-        }else{
-          setError("Something went wrong. try agin.")
-        }
+
+      alert("Account created successfully!");
+      navigate("/Login");
+
+    } catch (err) {
+      if (err.code === "auth/email-already-in-use") {
+        setError("This Student Code is already registered.");
+      } else if (err.code === "auth/weak-password") {
+        setError("Password should be at least 6 characters.");
+      } else {
+        setError("Registration failed. Please try again.");
+      }
     }
   };
 
-  return (
-    <div>
-     <h2>Create Account</h2>
-    <form onSubmit={handleRegister}>
-      <input type="text" placeholder=" Full Name" onChange={(e) => setName(e.target.value)} required />
-      <input type="text" placeholder=" ID" onChange={(e) => setStudentCode(e.target.value)} required />
-      <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
-      <input type="password" placeholder="Password " onChange={(e) => setPassword(e.target.value)} required />
-      <input type="password" placeholder="Confirm Password"  onChange={(e)=>setConfirmPassword(e.target.value)}/>
-      {error && (
-        <p style={{ 
-          color: '#ff4d4d', 
-          fontSize: '13px', 
-          marginBottom: '10px',
-          textAlign: 'center',
-          fontWeight: 'bold' 
-        }}>
-      {error}
-    </p>
-    )}
-      <button type="submit">Sign Up</button>
-    </form>
-    <Link to="/login">
-        Already have an account? Sign In
-      </Link>
+   return (
+    <div className="wrapper">
+    <div className="form-box register">
+      <form onSubmit={handleRegister}>
+        <h1>Registration</h1>
+
+        <div className="input-box">
+          <input
+            type="text"
+            placeholder="Full Name"
+            required
+            onChange={(e) => setName(e.target.value)}
+          />
+          <FaUser className="icon" />
+        </div>
+
+        <div className="input-box">
+          <input
+            type="text"
+            placeholder="Student ID"
+            required
+            onChange={(e) => setStudentCode(e.target.value)}
+          />
+          <FaUser className="icon" />
+        </div>
+
+        <div className="input-box">
+          <input
+            type="text"
+            placeholder="Phone Number"
+            required
+            onChange={(e) => setPhone(e.target.value)}
+          />
+          <FaPhoneAlt className="icon" />
+        </div>
+
+        <div className="input-box">
+          <input
+            type="password"
+            placeholder="Password"
+            required
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <FaLock className="icon" />
+        </div>
+
+        <div className="input-box">
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            required
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <FaLock className="icon" />
+        </div>
+
+        {error && <p className="error-message">{error}</p>}
+
+          <div className="remember-forgot">
+                <label><input type="checkbox" />I agree to the terms & conditions</label>
+                 
+             </div>
+             <button type="submit">Register</button>
+             <div className="register-link">
+                <p>Already have an account? <a href="#" onClick={() => navigate('/Login')}>Login</a></p>
+             </div>
+      </form>
     </div>
+  </div>
   );
 }
 
