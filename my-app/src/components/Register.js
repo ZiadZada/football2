@@ -7,6 +7,11 @@ import { FaUser, FaPhoneAlt, FaLock } from "react-icons/fa";
 import'../index.css';
 
 function Register() {
+   const[action,setAction]=useState('');
+       const LoginLink=(e)=>{
+        e.preventDefault();
+       navigate('/Login');
+       }
   const [name, setName] = useState("");
   const [studentCode, setStudentCode] = useState("");
   const [phone, setPhone] = useState("");
@@ -122,7 +127,7 @@ function Register() {
              </div>
              <button type="submit">Register</button>
              <div className="register-link">
-                <p>Already have an account? <a href="#" onClick={() => navigate('/Login')}>Login</a></p>
+                <p>Already have an account? <a href="#" onClick={LoginLink}>Login</a></p>
              </div>
       </form>
     </div>
