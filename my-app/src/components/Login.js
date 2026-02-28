@@ -1,85 +1,45 @@
-import { auth, db } from "../firebase"; 
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
-import { doc,getDoc } from "firebase/firestore"
-//import { collection, query, where, getDocs} from 'firebase/firestore';
-import { Link, useNavigate } from 'react-router-dom';
-import back from './back.jpg';
- 
- 
- 
 
-function Login() {
-  const navigate = useNavigate(); 
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+
+const Login = () => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [studentCode, setStudentCode] = useState("");
-  const [error, setError] = useState('');
 
-  const handleLogin = async (e) => {
-  e.preventDefault();
-  setError('');
-
-  const internalEmail = `${studentCode}@university.com`;
-
-  try {
-    const userCredential = await signInWithEmailAndPassword(auth, internalEmail, password);
-    const user = userCredential.user;
-
-    const docRef = doc(db, "users", user.uid);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      const userData = docSnap.data();
-      if (userData.role === "admin") {
-        navigate("/AdminDashboard");
-      } else if (userData.role === "student") {
-        navigate("/StudentDashboard");
-      } else {
-        navigate("/student");
-      }
-    } else {
-      setError("User profile not found.");
-    }
-
-  } catch (error) {
-    console.error("Error code:", error.code);
-    if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-      setError("Invalid ID or Password.");
-    } else {
-      setError("Login failed, please try again.");
-    }
-  }
-};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Email:", email, "Password:", password);
+  };
 
   return (
-     
-    <div style={{ padding: "280px", textAlign: "center", maxWidth: "1100px", margin: "auto",backgroundImage: `url(${back})`,backgroundSize: "cover" }}>
-      
-      <h2 >logIn</h2>
-      <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <div style={{ maxWidth: "400px", margin: "50px auto", textAlign: "center", padding: "20px", border: "1px solid #ccc", borderRadius: "8px" }}>
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
         <input 
-          type="text" 
-          placeholder="id" 
-          style={{ width: '35%', padding: '10px', marginBottom: '10px' }}
-          onChange={(e) => setStudentCode(e.target.value)} 
-          required 
+          type="email" 
+          placeholder="Email" 
+          value={email} 
+          onChange={(e) => setEmail(e.target.value)} 
+          required
+          style={{ padding: "10px", borderRadius: "5px", border: "1px solid #aaa" }}
         />
         <input 
           type="password" 
           placeholder="Password" 
-          style={{ width: '35%', padding: '10px', marginBottom: '10px' }}
+          value={password} 
           onChange={(e) => setPassword(e.target.value)} 
-          required 
+          required
+          style={{ padding: "10px", borderRadius: "5px", border: "1px solid #aaa" }}
         />
-        
-        {error && <p style={{ color: '#ff4d4d', fontSize: '13px' }}>{error}</p>}
-        
-        <button type="submit" style={{ padding: '10px 30px',color:'#000000', cursor: 'pointer',background:'#0ebc70' }}>Login</button>
+        <button type="submit" style={{ padding: "10px", borderRadius: "5px", backgroundColor: "#007bff", color: "#fff", border: "none", cursor: "pointer" }}>
+          Login
+        </button>
       </form>
-      <br />
-      <Link to="/register">Don't have an account? Create one</Link>
+      <p style={{ marginTop: "15px" }}>
+        Don't have an account? <Link to="/register">Register</Link>
+      </p>
     </div>
   );
-}
+};
 
 export default Login;
